@@ -60,6 +60,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   itemCount: providerw!.contactList.length,
                   itemBuilder: (context, index) {
                     return InkWell(onTap: () {
+                      providerr!.storeInde(index);
                       Navigator.pushNamed(context, "contactInfo",arguments: providerr!.contactList[index]);
                     },
                       child: Container(

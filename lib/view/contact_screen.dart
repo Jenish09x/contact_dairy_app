@@ -74,7 +74,14 @@ class _ContactScreenState extends State<ContactScreen> {
                     ),
                     Step(
                       title: const Text("Add Name"),
-                      content: TextField(
+                      content: TextFormField(
+                        validator: (value) {
+                          if(value==null||value.isEmpty)
+                            {
+                              return "please enter number";
+                            }
+                          return null;
+                        },
                         controller: txtName,
                         keyboardType: TextInputType.name,
                         decoration: const InputDecoration(
@@ -85,7 +92,14 @@ class _ContactScreenState extends State<ContactScreen> {
                     ),
                     Step(
                       title: const Text("Add Contact Number"),
-                      content: TextField(
+                      content: TextFormField(
+                        validator: (value) {
+                          if(value==null||value.isEmpty)
+                          {
+                            return "please enter number";
+                          }
+                          return null;
+                        },
                         controller: txtContact,
                         keyboardType: TextInputType.phone,
                         decoration: const InputDecoration(
@@ -96,7 +110,14 @@ class _ContactScreenState extends State<ContactScreen> {
                     ),
                     Step(
                       title: const Text("Add Email"),
-                      content: TextField(
+                      content: TextFormField(
+                        validator: (value) {
+                          if(value==null||value.isEmpty)
+                          {
+                            return "please enter number";
+                          }
+                          return null;
+                        },
                         controller: txtEmail,
                         keyboardType: TextInputType.emailAddress,
                         decoration: const InputDecoration(
@@ -118,6 +139,7 @@ class _ContactScreenState extends State<ContactScreen> {
                       email: txtEmail.text,
                       image: providerr!.path,
                       name: txtName.text);
+                  providerr!.path="";
                   providerr!.resetStep();
                   providerr!.addContact(cm);
                   Navigator.pop(context);

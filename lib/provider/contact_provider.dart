@@ -8,7 +8,7 @@ class ContactProvider with ChangeNotifier{
   int stepIndex=0;
   String? path;
   List<ContactModel>contactList=[];
-  int? removeIndex;
+  int? addIndex;
 
   //NextStep Stepper
   void nextStep(){
@@ -50,12 +50,17 @@ class ContactProvider with ChangeNotifier{
 
  void editData(ContactModel c1)
  {
-   contactList.add(c1);
+   contactList[addIndex!]=c1;
+   notifyListeners();
+ }
+ void storeInde(int index)
+ {
+   addIndex=index;
    notifyListeners();
  }
 
  void deleteData(){
-    contactList.removeAt(removeIndex!);
+    contactList.removeAt(addIndex!);
     notifyListeners();
  }
 

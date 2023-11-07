@@ -41,6 +41,7 @@ dependencies:
   introduction_screen: ^3.1.12
   lottie: ^2.7.0
   shared_preferences: ^2.2.2
+  url_launcher: ^6.2.1
 
 
 dev_dependencies:

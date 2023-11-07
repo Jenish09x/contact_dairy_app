@@ -5,6 +5,7 @@ import 'package:contact_dairy_app/widget/alert_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../provider/contact_provider.dart';
 
@@ -18,6 +19,7 @@ class ContactInfoScreen extends StatefulWidget {
 class _ContactInfoScreenState extends State<ContactInfoScreen> {
   ContactProvider? providerw;
   ContactProvider? providerr;
+
   @override
   Widget build(BuildContext context) {
     providerw = context.watch<ContactProvider>();
@@ -27,145 +29,206 @@ class _ContactInfoScreenState extends State<ContactInfoScreen> {
     return SafeArea(
       child: Scaffold(
         backgroundColor: Colors.grey.shade100,
-        body: Center(
-          child: Column(
-            children: [
-              const SizedBox(height: 50,),
-              // providerw!.contactList[index].image != null?
-               CircleAvatar(
-                radius: 70,
-                backgroundImage: FileImage(File("${c1.image}")),
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-               Text(
-                "${c1.name}",
-                style: const TextStyle(fontSize: 20),
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Container(
-                    height: MediaQuery.of(context).size.height * 0.08,
-                    width: MediaQuery.sizeOf(context).width * 0.30,
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: const Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(Icons.call),
-                        SizedBox(
-                          height: 5,
+        body: SingleChildScrollView(
+          child: Center(
+            child: Column(
+              children: [
+                const SizedBox(
+                  height: 50,
+                ),
+                (c1.image == null)
+                    ? CircleAvatar(
+                        radius: 70,
+                        child: Text(
+                          "${c1.name?.substring(0, 1).toUpperCase()}",
+                          style: const TextStyle(fontSize: 50),
                         ),
-                        Text("Call"),
-                      ],
-                    ),
-                  ),
-                  Container(
-                    height: MediaQuery.of(context).size.height * 0.08,
-                    width: MediaQuery.sizeOf(context).width * 0.30,
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: const Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(Icons.message),
-                        SizedBox(
-                          height: 5,
+                      )
+                    : CircleAvatar(
+                        radius: 70,
+                        backgroundImage: FileImage(File("${c1.image}")),
+                      ),
+                const SizedBox(
+                  height: 10,
+                ),
+                Text(
+                  "${c1.name}",
+                  style: const TextStyle(fontSize: 20),
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    InkWell(onTap: () async {
+                      Uri uri =Uri.parse("tel:+91${c1.contact}");
+                      await launchUrl(uri);
+                    },
+                      child: Container(
+                        height: MediaQuery.of(context).size.height * 0.08,
+                        width: MediaQuery.sizeOf(context).width * 0.30,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(20),
                         ),
-                        Text("Message"),
-                      ],
-                    ),
-                  ),
-                  Container(
-                    height: MediaQuery.of(context).size.height * 0.08,
-                    width: MediaQuery.sizeOf(context).width * 0.30,
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: const Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(Icons.videocam),
-                        SizedBox(
-                          height: 5,
+                        child: const Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(Icons.call),
+                            SizedBox(
+                              height: 5,
+                            ),
+                            Text("Call"),
+                          ],
                         ),
-                        Text("Video"),
-                      ],
+                      ),
                     ),
-                  ),
-                ],
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              Column(
-                children: [
-                  Container(
-                    height: MediaQuery.sizeOf(context).width * 0.35,
-                    width: MediaQuery.sizeOf(context).width * 0.95,
-                    padding: const EdgeInsets.all(15),
-                    decoration: BoxDecoration(
+                    InkWell(onTap: () async {
+                      Uri uri =Uri.parse("sms:+91${c1.contact}");
+                      await launchUrl(uri);
+                    },
+                      child: Container(
+                        height: MediaQuery.of(context).size.height * 0.08,
+                        width: MediaQuery.sizeOf(context).width * 0.30,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        child: const Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(Icons.message),
+                            SizedBox(
+                              height: 5,
+                            ),
+                            Text("Message"),
+                          ],
+                        ),
+                      ),
+                    ),
+                    InkWell(onTap: () async {
+                      Uri uri =Uri.parse("mailto:${c1.email}");
+                      await launchUrl(uri);
+                    },
+                      child: Container(
+                        height: MediaQuery.of(context).size.height * 0.08,
+                        width: MediaQuery.sizeOf(context).width * 0.30,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        child: const Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(Icons.email),
+                            SizedBox(
+                              height: 5,
+                            ),
+                            Text("Email"),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                Column(
+                  children: [
+                    Container(
+                      height: MediaQuery.sizeOf(context).width * 0.35,
+                      width: MediaQuery.sizeOf(context).width * 0.95,
+                      padding: const EdgeInsets.all(15),
+                      decoration: BoxDecoration(
                         color: Colors.white,
-                      borderRadius: BorderRadius.circular(20),
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Row(
+                            children: [
+                              const Icon(
+                                Icons.call_outlined,
+                                size: 25,
+                              ),
+                              const SizedBox(
+                                width: 10,
+                              ),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    "${c1.contact}",
+                                    style: const TextStyle(fontSize: 19),
+                                  ),
+                                  const Text(
+                                    "Mobile | India",
+                                    style: TextStyle(fontSize: 13),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                          Row(
+                            children: [
+                              const Icon(
+                                Icons.email_outlined,
+                                size: 25,
+                              ),
+                              const SizedBox(
+                                width: 10,
+                              ),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    "${c1.email}",
+                                    style: const TextStyle(fontSize: 19),
+                                  ),
+                                  const Text(
+                                    "Email",
+                                    style: TextStyle(fontSize: 13),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          )
+                        ],
+                      ),
                     ),
-                    child:  Column(mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    const SizedBox(
+                      height: 340,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        Row(
-                          children: [
-                            const Icon(Icons.call_outlined),
-                            const SizedBox(width: 10,),
-                            Column(crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text("${c1.contact}"),
-                                const Text("Mobile | India",style: TextStyle(fontSize: 11),),
-                              ],
-                            ),
-                          ],
-                        ),
-                        Row(
-                          children: [
-                            const Icon(Icons.email_outlined),
-                            const SizedBox(width: 10,),
-                            Column(crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text("${c1.email}"),
-                                const Text("Email",style: TextStyle(fontSize: 11),),
-                              ],
-                            ),
-                          ],
-                        )
+                        IconButton(
+                            onPressed: () {},
+                            icon: const Icon(CupertinoIcons.star)),
+                        IconButton(
+                            onPressed: () {
+                              showWidget(context, c1);
+                            },
+                            icon: const Icon(Icons.edit_outlined)),
+                        IconButton(
+                            onPressed: () {
+                              providerr!.deleteData();
+                              Navigator.pop(context);
+                            },
+                            icon: const Icon(Icons.delete_outline)),
+                        IconButton(
+                            onPressed: () {}, icon: const Icon(Icons.share)),
+                        IconButton(
+                            onPressed: () {}, icon: const Icon(Icons.more_vert)),
                       ],
                     ),
-                  ),
-                  const SizedBox(height: 340,),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      IconButton(onPressed: () {}, icon: const Icon(CupertinoIcons.star)),
-                      IconButton(onPressed: () {
-                        showWidget(context,c1);
-                      }, icon: const Icon(Icons.edit_outlined)),
-                      IconButton(onPressed: () {
-                        providerr!.deleteData();
-                        Navigator.pop(context);
-                      }, icon: const Icon(Icons.delete_outline)),
-                      IconButton(onPressed: () {}, icon: const Icon(Icons.share)),
-                      IconButton(onPressed: () {}, icon: const Icon(Icons.more_vert)),
-                    ],
-                  ),
-                ],
-              ),
-            ],
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
       ),

@@ -10,6 +10,7 @@ void main() {
       create: (context) => ContactProvider(),
       child: Consumer<ContactProvider>(
         builder: (context, value, child) => MaterialApp(
+          theme: ThemeData(useMaterial3: true),
           debugShowCheckedModeBanner: false,
           routes: screen_routes,
         ),

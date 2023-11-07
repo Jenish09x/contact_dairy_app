@@ -13,7 +13,6 @@ void showWidget(BuildContext context,ContactModel c1) {
     context: context,
     builder: (context) {
       return  AlertDialog(
-        alignment: Alignment.bottomCenter,
         title: const Text("Update Contacts"),
         actions: [
           TextField(
@@ -25,6 +24,7 @@ void showWidget(BuildContext context,ContactModel c1) {
           ),
           const SizedBox(height: 10,),
           TextField(
+            keyboardType: TextInputType.number,
             controller: txtContact,
             decoration: const InputDecoration(
               border: OutlineInputBorder(),
