@@ -76,21 +76,34 @@ class ContactProvider with ChangeNotifier {
     Share.share("${cm.name}\n${cm.contact}");
   }
 
-
-  Future<bool?> bioMatrix() async {
-    LocalAuthentication auth = LocalAuthentication();
-    bool checkBioMatrixStatus = await auth.canCheckBiometrics;
-    if (checkBioMatrixStatus) {
-      List<BiometricType> biotypes = await auth.getAvailableBiometrics();
-      if (biotypes.isNotEmpty) {
-        bool isAuth = await auth.authenticate(
-          localizedReason: "Hi",
-          options: const AuthenticationOptions(
-              biometricOnly: false, useErrorDialogs: true),
-        );
-        return isAuth;
-      }
-    }
-    return null;
-  }
+  // void hideContact() {
+  //   ContactModel hiddenContact = addContactList[addIndex!];
+  //   hideContactList.add(hiddenContact);
+  //   addContactList.removeAt(addIndex!);
+  //   notifyListeners();
+  // }
+  //
+  // void unHideContact() {
+  //   ContactModel unHideContact = hideContactList[addIndex!];
+  //   addContactList.add(unHideContact);
+  //   hideContactList.removeAt(addIndex!);
+  //   notifyListeners();
+  // }
+  //
+  // Future<bool?> bioMatrix() async {
+  //   LocalAuthentication auth = LocalAuthentication();
+  //   bool checkBioMatrixStatus = await auth.canCheckBiometrics;
+  //   if (checkBioMatrixStatus) {
+  //     List<BiometricType> biotypes = await auth.getAvailableBiometrics();
+  //     if (biotypes.isNotEmpty) {
+  //       bool isAuth = await auth.authenticate(
+  //         localizedReason: "Hi",
+  //         options: const AuthenticationOptions(
+  //             biometricOnly: false, useErrorDialogs: true),
+  //       );
+  //       return isAuth;
+  //     }
+  //   }
+  //   return null;
+  // }
 }
