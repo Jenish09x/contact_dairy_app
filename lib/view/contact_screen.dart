@@ -1,10 +1,11 @@
 import 'dart:io';
 
-import 'package:contact_dairy_app/model/contact_model.dart';
-import 'package:contact_dairy_app/provider/contact_provider.dart';
+import 'package:contact_dairy_app/widget/alert_widget.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
+
+import '../provider/contact_provider.dart';
 
 class ContactScreen extends StatefulWidget {
   const ContactScreen({super.key});
@@ -14,155 +15,97 @@ class ContactScreen extends StatefulWidget {
 }
 
 class _ContactScreenState extends State<ContactScreen> {
-  ContactProvider? providerw;
-  ContactProvider? providerr;
-
-  TextEditingController txtName = TextEditingController();
-  TextEditingController txtContact = TextEditingController();
-  TextEditingController txtEmail = TextEditingController();
+  ContactProvider? providerW;
+  ContactProvider? providerR;
 
   @override
   Widget build(BuildContext context) {
-    providerw = context.watch<ContactProvider>();
-    providerr = context.read<ContactProvider>();
+    providerW = context.watch<ContactProvider>();
+    providerR = context.read<ContactProvider>();
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.white,
-          title: const Text(
-            "Add Contacts",
-            style: TextStyle(color: Colors.black),
-          ),
-          centerTitle: true,
+          leading: IconButton(onPressed: () {
+            // providerR!.bioMatrix();
+            // Navigator.pushNamed(context, "hideScreen");
+          }, icon: const Icon(CupertinoIcons.eye_fill)),
+          actions: [
+            IconButton(
+              onPressed: () {},
+              icon: const Icon(Icons.search,color: Colors.black,),
+            ),
+            IconButton(
+              onPressed: () {},
+              icon: const Icon(Icons.more_vert,color: Colors.black,),
+            ),
+          ],
         ),
-        body: SingleChildScrollView(
-          child: Column(
+        body: Padding(
+          padding: const EdgeInsets.all(10),
+          child: Column(crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const SizedBox(
-                height: 50,
-              ),
-              Consumer<ContactProvider>(
-                builder: (context, value, child) => Stepper(
-                  currentStep: value.stepIndex,
-                  onStepContinue: () {
-                    value.nextStep();
-                  },
-                  onStepCancel: () {
-                    value.backStep();
-                  },
-                  steps: [
-                    Step(
-                      title: const Text("Add Image"),
-                      content: Column(
-                        children: [
-                          CircleAvatar(
-                            radius: 70,
-                            backgroundImage: value.path != null
-                                ? FileImage(File(value.path!))
-                                : null,
-                          ),
-                          IconButton(
-                              onPressed: () async {
-                                ImagePicker imgPiker = ImagePicker();
-                                XFile? image = await imgPiker.pickImage(
-                                    source: ImageSource.gallery);
-                                providerr!.updateImagePath(image!.path);
-                              },
-                              icon: const Icon(Icons.image))
-                        ],
-                      ),
-                    ),
-                    Step(
-                      title: const Text("Add Name"),
-                      content: TextFormField(
-                        validator: (value) {
-                          if(value==null||value.isEmpty)
-                            {
-                              return "please enter number";
-                            }
-                          return null;
-                        },
-                        controller: txtName,
-                        keyboardType: TextInputType.name,
-                        decoration: const InputDecoration(
-                          border: OutlineInputBorder(),
-                          label: Text("Enter Name"),
-                        ),
-                      ),
-                    ),
-                    Step(
-                      title: const Text("Add Contact Number"),
-                      content: TextFormField(
-                        validator: (value) {
-                          if(value==null||value.isEmpty)
-                          {
-                            return "please enter number";
-                          }
-                          return null;
-                        },
-                        controller: txtContact,
-                        keyboardType: TextInputType.phone,
-                        decoration: const InputDecoration(
-                          border: OutlineInputBorder(),
-                          label: Text("Enter Number"),
-                        ),
-                      ),
-                    ),
-                    Step(
-                      title: const Text("Add Email"),
-                      content: TextFormField(
-                        validator: (value) {
-                          if(value==null||value.isEmpty)
-                          {
-                            return "please enter number";
-                          }
-                          return null;
-                        },
-                        controller: txtEmail,
-                        keyboardType: TextInputType.emailAddress,
-                        decoration: const InputDecoration(
-                          border: OutlineInputBorder(),
-                          label: Text("Enter Email"),
-                        ),
-                      ),
-                    ),
-                  ],
+              const SizedBox(height: 30,),
+              const Text(
+                "Contacts",
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 40,
                 ),
               ),
-              const SizedBox(
-                height: 50,
+              const SizedBox(height: 10,),
+              Text(
+                "${providerW!.countIndex} contacts",
+                style: const TextStyle(
+                  color: Colors.black,
+                  fontSize: 12,
+                ),
               ),
-              InkWell(
-                onTap: () {
-                  ContactModel cm = ContactModel(
-                      contact: txtContact.text,
-                      email: txtEmail.text,
-                      image: providerr!.path,
-                      name: txtName.text);
-                  providerr!.path="";
-                  providerr!.resetStep();
-                  providerr!.addContact(cm);
-                  Navigator.pop(context);
-                },
-                child: Container(
-                  height: MediaQuery.of(context).size.height * 0.06,
-                  width: MediaQuery.of(context).size.width * 0.85,
-                  decoration: BoxDecoration(
-                      color: Colors.purple,
-                      borderRadius: BorderRadius.circular(30)),
-                  child: const Center(
-                    child: Text(
-                      "Submit",
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 17,
-                          fontWeight: FontWeight.bold),
-                    ),
-                  ),
+              Expanded(
+                child: ListView.builder(
+                  itemCount: providerW!.contactList.length,
+                  itemBuilder: (context, index) {
+                    return InkWell(onTap: () {
+                      providerR!.counter(index);
+                      providerR!.storeIndex(index);
+                      Navigator.pushNamed(context, "contactInfo",arguments: providerR!.contactList[index]);
+                    },
+                      child: Container(
+                        height: MediaQuery.of(context).size.height * 0.10,
+                        width: MediaQuery.of(context).size.width * 0.10,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(20)),
+                        child: Row(
+                          children: [
+                            providerW!.contactList[index].image != null ? CircleAvatar(
+                              radius: 25,
+                              backgroundImage: FileImage(File(
+                                  "${providerW!.contactList[index].image}"),
+                              ),
+                            ): CircleAvatar(
+                              radius: 25,
+                                  child: Text("${providerW!.contactList[index].name?.substring(0, 1).toUpperCase()}",style: const TextStyle(fontSize: 20),
+                                  ),
+                              ),
+                            const SizedBox(width: 20,),
+                            Text("${providerR!.contactList[index].name}",style: const TextStyle(fontSize: 20),)
+                          ],
+                        ),
+                      ),
+                    );
+                  },
                 ),
               ),
             ],
           ),
+        ),
+        floatingActionButton: FloatingActionButton(
+          splashColor: Colors.lightGreen,
+          backgroundColor: Colors.green,
+          onPressed: () {
+            Navigator.pushNamed(context, "contact");
+          },
+          child: const Icon(Icons.add),
         ),
       ),
     );

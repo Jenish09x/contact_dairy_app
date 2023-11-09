@@ -17,13 +17,13 @@ class ContactInfoScreen extends StatefulWidget {
 }
 
 class _ContactInfoScreenState extends State<ContactInfoScreen> {
-  ContactProvider? providerw;
-  ContactProvider? providerr;
+  ContactProvider? providerW;
+  ContactProvider? providerR;
 
   @override
   Widget build(BuildContext context) {
-    providerw = context.watch<ContactProvider>();
-    providerr = context.read<ContactProvider>();
+    providerW = context.watch<ContactProvider>();
+    providerR = context.read<ContactProvider>();
     ContactModel c1 =
         ModalRoute.of(context)!.settings.arguments as ContactModel;
     return SafeArea(
@@ -215,12 +215,14 @@ class _ContactInfoScreenState extends State<ContactInfoScreen> {
                             icon: const Icon(Icons.edit_outlined)),
                         IconButton(
                             onPressed: () {
-                              providerr!.deleteData();
+                              providerR!.deleteData();
                               Navigator.pop(context);
                             },
                             icon: const Icon(Icons.delete_outline)),
                         IconButton(
-                            onPressed: () {}, icon: const Icon(Icons.share)),
+                            onPressed: (){
+                              providerR!.shareData(c1);
+                            }, icon: const Icon(Icons.share)),
                         IconButton(
                             onPressed: () {}, icon: const Icon(Icons.more_vert)),
                       ],
