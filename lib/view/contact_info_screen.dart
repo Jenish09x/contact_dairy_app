@@ -206,8 +206,11 @@ class _ContactInfoScreenState extends State<ContactInfoScreen> {
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         IconButton(
-                            onPressed: () {},
-                            icon: const Icon(CupertinoIcons.star)),
+                            onPressed: () {
+                              providerR!.hideContact();
+                              Navigator.pop(context);
+                            },
+                            icon: const Icon(CupertinoIcons.eye_slash)),
                         IconButton(
                             onPressed: () {
                               showWidget(context, c1);

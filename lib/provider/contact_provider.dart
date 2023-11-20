@@ -9,8 +9,7 @@ class ContactProvider with ChangeNotifier {
   List<ContactModel> contactList = [];
   int? addIndex;
   int countIndex = 0;
-  bool isPrivate = false;
-  List<ContactModel> addContactList = [];
+  bool? isPrivate;
   List<ContactModel> hideContactList = [];
 
   //NextStep Stepper
@@ -76,34 +75,40 @@ class ContactProvider with ChangeNotifier {
     Share.share("${cm.name}\n${cm.contact}");
   }
 
-  // void hideContact() {
-  //   ContactModel hiddenContact = addContactList[addIndex!];
-  //   hideContactList.add(hiddenContact);
-  //   addContactList.removeAt(addIndex!);
-  //   notifyListeners();
-  // }
-  //
-  // void unHideContact() {
-  //   ContactModel unHideContact = hideContactList[addIndex!];
-  //   addContactList.add(unHideContact);
-  //   hideContactList.removeAt(addIndex!);
-  //   notifyListeners();
-  // }
-  //
-  // Future<bool?> bioMatrix() async {
-  //   LocalAuthentication auth = LocalAuthentication();
-  //   bool checkBioMatrixStatus = await auth.canCheckBiometrics;
-  //   if (checkBioMatrixStatus) {
-  //     List<BiometricType> biotypes = await auth.getAvailableBiometrics();
-  //     if (biotypes.isNotEmpty) {
-  //       bool isAuth = await auth.authenticate(
-  //         localizedReason: "Hi",
-  //         options: const AuthenticationOptions(
-  //             biometricOnly: false, useErrorDialogs: true),
-  //       );
-  //       return isAuth;
-  //     }
-  //   }
-  //   return null;
-  // }
+  //hide
+  void hideContact() {
+
+    ContactModel hiddenContact = contactList[addIndex!];
+    hideContactList.add(hiddenContact);
+    contactList.removeAt(addIndex!);
+    notifyListeners();
+  }
+
+  //unHide
+  void unHideContact() {
+    ContactModel unHideContact = hideContactList[addIndex!];
+    contactList.add(unHideContact);
+    hideContactList.removeAt(addIndex!);
+    notifyListeners();
+  }
+
+  //bioMatrix
+  Future<bool?> bioMatrix() async {
+    LocalAuthentication auth = LocalAuthentication();
+    bool checkBioMatrixStatus = await auth.canCheckBiometrics;
+    if (checkBioMatrixStatus) {
+      List<BiometricType> biotypes = await auth.getAvailableBiometrics();
+      if (biotypes.isNotEmpty) {
+        bool isAuth = await auth.authenticate(
+          localizedReason: "Hi",
+          options: const AuthenticationOptions(
+              biometricOnly: false, useErrorDialogs: true),
+        );
+        return isAuth;
+      }
+    }
+    return null;
+  }
+
+
 }

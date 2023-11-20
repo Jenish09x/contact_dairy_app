@@ -1,6 +1,5 @@
 import 'package:contact_dairy_app/provider/contact_provider.dart';
 import 'package:contact_dairy_app/utils/app_routes.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

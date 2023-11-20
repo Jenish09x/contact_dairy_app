@@ -21,6 +21,9 @@ class _AddContactScreenState extends State<AddContactScreen> {
   TextEditingController txtContact = TextEditingController();
   TextEditingController txtEmail = TextEditingController();
 
+  GlobalKey<FormState> nameKey = GlobalKey<FormState>();
+  GlobalKey<FormState> numberKey = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
     providerW = context.watch<ContactProvider>();
@@ -28,7 +31,6 @@ class _AddContactScreenState extends State<AddContactScreen> {
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
-          backgroundColor: Colors.white,
           title: const Text(
             "Add Contacts",
             style: TextStyle(color: Colors.black),
@@ -45,10 +47,21 @@ class _AddContactScreenState extends State<AddContactScreen> {
                 builder: (context, value, child) => Stepper(
                   currentStep: value.stepIndex,
                   onStepContinue: () {
-                    value.nextStep();
+                    if (providerW!.stepIndex == 1) {
+                      if (nameKey.currentState!.validate()) {
+                        providerW!.nextStep();
+                      }
+                    } else if(providerW!.stepIndex == 2){
+                      if (numberKey.currentState!.validate()){
+                        providerW!.nextStep();
+                      }
+                    }
+                    else {
+                      providerW!.nextStep();
+                    }
                   },
                   onStepCancel: () {
-                    value.backStep();
+                    providerR!.backStep();
                   },
                   steps: [
                     Step(
@@ -74,37 +87,41 @@ class _AddContactScreenState extends State<AddContactScreen> {
                     ),
                     Step(
                       title: const Text("Add Name"),
-                      content: TextFormField(
-                        validator: (value) {
-                          if(value==null||value.isEmpty)
-                          {
-                            return "please enter number";
-                          }
-                          return null;
-                        },
-                        controller: txtName,
-                        keyboardType: TextInputType.name,
-                        decoration: const InputDecoration(
-                          border: OutlineInputBorder(),
-                          label: Text("Enter Name"),
+                      content: Form(
+                        key: nameKey,
+                        child: TextFormField(
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'please enter name';
+                            }
+                            return null;
+                          },
+                          controller: txtName,
+                          keyboardType: TextInputType.name,
+                          decoration: const InputDecoration(
+                            border: OutlineInputBorder(),
+                            label: Text("Enter Name"),
+                          ),
                         ),
                       ),
                     ),
                     Step(
                       title: const Text("Add Contact Number"),
-                      content: TextFormField(
-                        validator: (value) {
-                          if(value==null||value.isEmpty)
-                          {
-                            return "please enter number";
-                          }
-                          return null;
-                        },
-                        controller: txtContact,
-                        keyboardType: TextInputType.phone,
-                        decoration: const InputDecoration(
-                          border: OutlineInputBorder(),
-                          label: Text("Enter Number"),
+                      content: Form(
+                        key: numberKey,
+                        child: TextFormField(
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'please enter number';
+                            }
+                            return null;
+                          },
+                          controller: txtContact,
+                          keyboardType: TextInputType.phone,
+                          decoration: const InputDecoration(
+                            border: OutlineInputBorder(),
+                            label: Text("Enter Number"),
+                          ),
                         ),
                       ),
                     ),
@@ -112,8 +129,7 @@ class _AddContactScreenState extends State<AddContactScreen> {
                       title: const Text("Add Email"),
                       content: TextFormField(
                         validator: (value) {
-                          if(value==null||value.isEmpty)
-                          {
+                          if (value == null || value.isEmpty) {
                             return "please enter number";
                           }
                           return null;
@@ -149,8 +165,9 @@ class _AddContactScreenState extends State<AddContactScreen> {
                   height: MediaQuery.of(context).size.height * 0.06,
                   width: MediaQuery.of(context).size.width * 0.85,
                   decoration: BoxDecoration(
-                      color: Colors.purple,
-                      borderRadius: BorderRadius.circular(30)),
+                    color: Colors.purple,
+                    borderRadius: BorderRadius.circular(30),
+                  ),
                   child: const Center(
                     child: Text(
                       "Submit",
