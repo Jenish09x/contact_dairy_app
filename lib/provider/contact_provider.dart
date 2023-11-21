@@ -9,7 +9,7 @@ class ContactProvider with ChangeNotifier {
   List<ContactModel> contactList = [];
   int? addIndex;
   int countIndex = 0;
-  bool? isPrivate;
+  bool isPrivate=false;
   List<ContactModel> hideContactList = [];
 
   //NextStep Stepper
@@ -109,6 +109,4 @@ class ContactProvider with ChangeNotifier {
     }
     return null;
   }
-
-
 }

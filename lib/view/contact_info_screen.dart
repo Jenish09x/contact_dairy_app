@@ -28,7 +28,6 @@ class _ContactInfoScreenState extends State<ContactInfoScreen> {
         ModalRoute.of(context)!.settings.arguments as ContactModel;
     return SafeArea(
       child: Scaffold(
-        backgroundColor: Colors.grey.shade100,
         body: SingleChildScrollView(
           child: Center(
             child: Column(
@@ -69,7 +68,6 @@ class _ContactInfoScreenState extends State<ContactInfoScreen> {
                         height: MediaQuery.of(context).size.height * 0.08,
                         width: MediaQuery.sizeOf(context).width * 0.30,
                         decoration: BoxDecoration(
-                          color: Colors.white,
                           borderRadius: BorderRadius.circular(20),
                         ),
                         child: const Column(
@@ -92,7 +90,6 @@ class _ContactInfoScreenState extends State<ContactInfoScreen> {
                         height: MediaQuery.of(context).size.height * 0.08,
                         width: MediaQuery.sizeOf(context).width * 0.30,
                         decoration: BoxDecoration(
-                          color: Colors.white,
                           borderRadius: BorderRadius.circular(20),
                         ),
                         child: const Column(
@@ -115,7 +112,6 @@ class _ContactInfoScreenState extends State<ContactInfoScreen> {
                         height: MediaQuery.of(context).size.height * 0.08,
                         width: MediaQuery.sizeOf(context).width * 0.30,
                         decoration: BoxDecoration(
-                          color: Colors.white,
                           borderRadius: BorderRadius.circular(20),
                         ),
                         child: const Column(
@@ -142,7 +138,6 @@ class _ContactInfoScreenState extends State<ContactInfoScreen> {
                       width: MediaQuery.sizeOf(context).width * 0.95,
                       padding: const EdgeInsets.all(15),
                       decoration: BoxDecoration(
-                        color: Colors.white,
                         borderRadius: BorderRadius.circular(20),
                       ),
                       child: Column(
@@ -206,11 +201,21 @@ class _ContactInfoScreenState extends State<ContactInfoScreen> {
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         IconButton(
-                            onPressed: () {
+                          onPressed: () {
+                            providerR!.isPrivate;
+                            if(providerR!.isPrivate)
+                            {
+                              providerR!.unHideContact();
+                            }
+                            else{
                               providerR!.hideContact();
-                              Navigator.pop(context);
-                            },
-                            icon: const Icon(CupertinoIcons.eye_slash)),
+                            }
+                            Navigator.pop(context);
+                          },
+                          icon: providerR!.isPrivate
+                              ? const Icon(Icons.remove_red_eye)
+                              :  const Icon(CupertinoIcons.eye_slash),
+                        ),
                         IconButton(
                             onPressed: () {
                               showWidget(context, c1);

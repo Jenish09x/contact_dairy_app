@@ -11,6 +11,19 @@ class ShareHelper {
      bool? status = sharedPreferences.getBool("intro");
      return status;
   }
+
+  void setTheme(bool isTheme) async {
+    SharedPreferences shr = await SharedPreferences.getInstance();
+    shr.setBool('theme', isTheme);
+  }
+
+  Future<bool?> getTheme() async {
+    SharedPreferences shr = await SharedPreferences.getInstance();
+    bool? isTheme = await shr.getBool('theme');
+    return isTheme;
+  }
+
+
   void setRegister(String email, String password)async {
     SharedPreferences shr = await SharedPreferences.getInstance();
     shr.setString("email",email);

@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../provider/contact_provider.dart';
+import '../provider/theme_provider.dart';
+import '../utils/shared_helper.dart';
 
 class ContactScreen extends StatefulWidget {
   const ContactScreen({super.key});
@@ -25,14 +27,25 @@ class _ContactScreenState extends State<ContactScreen> {
       child: Scaffold(
         appBar: AppBar(
           leading: IconButton(onPressed: () async{
-            // bool? isPrivate= await providerR!.bioMatrix();
-            // if(isPrivate!=null || isPrivate==true)
-            //   {
-            //     // ignore: use_build_context_synchronously
-            //     Navigator.pushNamed(context, "hideScreen");
-            //   }
-            Navigator.pushNamed(context, "hideScreen");
+            bool? isPrivate= await providerR!.bioMatrix();
+            if(isPrivate!=null || isPrivate==true)
+              {
+                // ignore: use_build_context_synchronously
+                Navigator.pushNamed(context, "hideScreen");
+              }
           }, icon: const Icon(CupertinoIcons.eye_fill),),
+          actions: [
+            Consumer<ThemeProvider>(
+              builder: (context, value, child) => Switch(
+                value: value.isLight,
+                onChanged: (value1) {
+                  ShareHelper shr = ShareHelper();
+                  shr.setTheme(value1);
+                  value.changeTheme();
+                },
+              ),
+            ),
+          ],
         ),
         body: Padding(
           padding: const EdgeInsets.all(10),
@@ -42,7 +55,6 @@ class _ContactScreenState extends State<ContactScreen> {
               const Text(
                 "Contacts",
                 style: TextStyle(
-                  color: Colors.black,
                   fontSize: 40,
                 ),
               ),
@@ -50,7 +62,6 @@ class _ContactScreenState extends State<ContactScreen> {
               Text(
                 " ${providerW!.countIndex} contacts",
                 style: const TextStyle(
-                  color: Colors.black,
                   fontSize: 12,
                 ),
               ),
@@ -109,6 +120,7 @@ class _ContactScreenState extends State<ContactScreen> {
           splashColor: Colors.lightGreen,
           backgroundColor: Colors.green,
           onPressed: () {
+            providerR!.isPrivate=false;
             Navigator.pushNamed(context, "contact");
           },
           child: const Icon(Icons.add),
